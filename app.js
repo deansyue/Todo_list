@@ -3,6 +3,9 @@ const express = require('express')
 //載入 mongoose
 const mongoose = require('mongoose')
 
+//  載入express-handlebars
+const exphbs = require('express-handlebars')
+
 const app = express()
 
 //設定port位置
@@ -22,9 +25,12 @@ dbStatus.once('open', () => {
   console.log('mongodb connected!')
 })
 
+app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
+app.set('view engine', 'hbs')
+
 //設定首頁路由
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.render('index')
 })
 
 //監聽伺服器
