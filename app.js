@@ -6,6 +6,9 @@ const mongoose = require('mongoose')
 //  載入express-handlebars
 const exphbs = require('express-handlebars')
 
+//載入model>todo
+const Todo = require('./models/todo')
+
 const app = express()
 
 //設定port位置
@@ -30,7 +33,11 @@ app.set('view engine', 'hbs')
 
 //設定首頁路由
 app.get('/', (req, res) => {
-  res.render('index')
+  Todo.find() //取出todo model的所有資料
+    .lean() //把Mongoose 的 Model物件轉換成乾淨的javaScript資料陣列
+    .then(todos => res.render('index', { todos })) //將資料傳給index樣本
+    .catch(error => console.error(error)) //錯誤處理
+
 })
 
 //監聽伺服器
