@@ -6,6 +6,7 @@ const mongoose = require('mongoose')
 //  載入express-handlebars
 const exphbs = require('express-handlebars')
 
+
 //載入model>todo
 const Todo = require('./models/todo')
 
@@ -31,6 +32,9 @@ dbStatus.once('open', () => {
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
 
+//用 app.use 規定每一筆請求都需要透過 express內建的body-parser 進行前置處理
+app.use(express.urlencoded({ extended: true }))
+
 //設定首頁路由
 app.get('/', (req, res) => {
   Todo.find() //取出todo model的所有資料
@@ -38,6 +42,19 @@ app.get('/', (req, res) => {
     .then(todos => res.render('index', { todos })) //將資料傳給index樣本
     .catch(error => console.error(error)) //錯誤處理
 
+})
+
+//設定new的路由
+app.get('/todos/new', (req, res) => {
+  return res.render('new')
+})
+
+//設定create功能路由
+app.post('/todos', (req, res) => {
+  const name = req.body.name //將從input表單內的key-value值取出
+  return Todo.create({ name }) //存入資料庫
+    .then(() => res.redirect('/')) //新增完成後導向首頁
+    .catch(error => console.log(error))
 })
 
 //監聽伺服器
