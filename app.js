@@ -57,6 +57,15 @@ app.post('/todos', (req, res) => {
     .catch(error => console.log(error))
 })
 
+//設定detail路徑路由
+app.get('/todos/:id', (req, res) => {
+  const id = req.params.id
+  return Todo.findById(id)
+    .lean()
+    .then(todo => res.render('detail', { todo }))
+    .catch(error => console.log(error))
+})
+
 //監聽伺服器
 app.listen(port, () => {
   console.log(`Express is running on http://localhost:${port}`)
