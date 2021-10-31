@@ -5,6 +5,8 @@ const mongoose = require('mongoose')
 
 //  載入express-handlebars
 const exphbs = require('express-handlebars')
+// 載入method-override
+const methodOverride = require('method-override')
 
 
 //載入model>todo
@@ -34,6 +36,9 @@ app.set('view engine', 'hbs')
 
 //用 app.use 規定每一筆請求都需要透過 express內建的body-parser 進行前置處理
 app.use(express.urlencoded({ extended: true }))
+
+// url裡有?_method時會經由method-override來轉換為相對應的http動詞
+app.use(methodOverride('_method'))
 
 //設定首頁路由
 app.get('/', (req, res) => {
@@ -77,7 +82,7 @@ app.get('/todos/:id/edit', (req, res) => {
 })
 
 //設定使用save傳送出修改表單的路由
-app.post('/todos/:id/edit', (req, res) => {
+app.put('/todos/:id', (req, res) => {
   const id = req.params.id
   const { name, isDone } = req.body
   return Todo.findById(id)
@@ -91,7 +96,7 @@ app.post('/todos/:id/edit', (req, res) => {
 })
 
 //設定使用delete後的路由
-app.post('/todos/:id/delete', (req, res) => {
+app.delete('/todos/:id', (req, res) => {
   const id = req.params.id
   return Todo.findById(id)
     .then((todo) => todo.remove())
