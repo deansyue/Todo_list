@@ -7,6 +7,10 @@ const todoSchema = new Schema({
   name: {
     type: String, //資料型別為字串
     required: true, //為必輸入欄位
+  },
+  isDone: {
+    type: Boolean, //資料型別為boolean值
+    default: false, // 預設值為false
   }
 })
 
