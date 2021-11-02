@@ -12,8 +12,8 @@ require('./config/mongoose')
 
 const app = express()
 
-//設定port位置
-const port = 3000
+//設定port位置，如果在 Heroku 環境則使用 process.env.PORT，否則為本地環境，使用 3000
+const port = process.env.PORT || 3000
 
 
 
